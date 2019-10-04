@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "553034007895",
+    "firebase_url": "https://mobillschallenge.firebaseio.com",
+    "project_id": "mobillschallenge",
+    "storage_bucket": "mobillschallenge.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553034007895:android:e17f26ec10c47913d16a12",
+        "android_client_info": {
+          "package_name": "com.mobills"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553034007895-ocbif7o92o3hh1738e8omu896o742nbr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpRhWz3oXpZsPKwY244P6djEAFg7hShzA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553034007895-ocbif7o92o3hh1738e8omu896o742nbr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
