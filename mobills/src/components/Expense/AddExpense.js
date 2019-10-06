@@ -113,19 +113,7 @@ class AddExpense extends Component {
         </View>
         <View style={styles.buttons}>
           <TouchableOpacity style={styles.buttonLeft} onPress={this.addExpense}>
-            <Text>Adicionar</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.buttonLeft}
-            onPress={() => this.props.navigation.navigate('ExpenseRoute')}>
-            <Text>Inicio</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.buttonLeft}
-            onPress={() => this.props.navigation.goBack()}>
-            <Text>Voltar</Text>
+            <Text style={styles.textButton}>Adicionar</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -159,7 +147,7 @@ const styles = StyleSheet.create({
   buttons: {
     width: '100%',
     height: 400,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   buttonLeft: {
@@ -167,12 +155,12 @@ const styles = StyleSheet.create({
     padding: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
-    backgroundColor: '#2173d2',
+    borderRadius: 50,
+    backgroundColor: '#f44336',
     marginBottom: 10,
   },
   textButton: {
-    fontSize: 25,
+    fontSize: 16,
     color: '#fff',
   },
 });
