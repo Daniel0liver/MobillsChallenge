@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
 import {
   StyleSheet,
@@ -12,10 +11,9 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import IconFontIsto from 'react-native-vector-icons/Fontisto';
 import firestore from '@react-native-firebase/firestore';
 
-const refExpense = firestore().collection('despesa');
+const refExpense = firestore().collection('expense');
 
 class AddExpense extends Component {
   state = {
@@ -33,17 +31,26 @@ class AddExpense extends Component {
 
   addExpense = async () => {
     const {value, description, date, paidOut} = this.state;
-
-    try {
-      await refExpense.add({
-        value: parseFloat(value),
-        description: description,
-        date: Date(date),
-        paidOut: paidOut, 
-      });
-      this.setState({isAdded: true});
-    } catch (err) {
-      alert(err);
+    if (value > 0 || description != '') {
+      try {
+        await refExpense.add({
+          value: parseFloat(value),
+          description: description,
+          date: Date(date),
+          paidOut: paidOut,
+        });
+        this.setState({
+          isAdded: true,
+        });
+        if ((this.state.isAdded = true)) {
+          // Se for adicionado, redirecionar para despesas
+          this.props.navigation.goBack();
+        }
+      } catch (err) {
+        alert(err);
+      }
+    } else {
+      alert('Preencha todos os campos!')
     }
   };
 
