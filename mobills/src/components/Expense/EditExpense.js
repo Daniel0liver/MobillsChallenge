@@ -4,6 +4,10 @@ import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 class EditExpense extends Component {
   static navigationOptions = {
     title: 'Editar Despesa',
+    headerStyle: { // Estilizando o menu
+      backgroundColor: '#f44336',
+    },
+    headerTintColor: '#fff',
   };
   render() {
     return (

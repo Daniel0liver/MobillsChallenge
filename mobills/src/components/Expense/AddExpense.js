@@ -24,9 +24,13 @@ class AddExpense extends Component {
     isAdded: false,
     isDateTimePickerVisible: false,
   };
-  
+
   static navigationOptions = {
     title: 'Adicionar Despesa',
+    headerStyle: { // Estilizando o menu
+      backgroundColor: '#f44336',
+    },
+    headerTintColor: '#fff',
   };
 
   addExpense = async () => {
@@ -67,7 +71,8 @@ class AddExpense extends Component {
               placeholder="Insira um valor"
               keyboardType={'number-pad'}
               value={this.state.value}
-              onChangeText={value => this.setState({value})}/>
+              onChangeText={value => this.setState({value})}
+            />
           </View>
           <View style={styles.fields}>
             <IconMaterialIcons name="date-range" style={styles.icon}/>
