@@ -99,6 +99,15 @@ class ExpenseScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  activity: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   container: {
     height: '100%',
     paddingVertical: 22,
