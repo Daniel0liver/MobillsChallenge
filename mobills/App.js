@@ -35,21 +35,4 @@ class App extends React.Component {
     return <RootStack />;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonLeft: {
-    width: 60,
-    height: 60,
-    justifyContent: 'space-evenly',
-    alignItems: 'flex-end',
-    borderRadius: 50,
-    backgroundColor: '#f13',
-  },
-});
 export default createAppContainer(RootStack);
