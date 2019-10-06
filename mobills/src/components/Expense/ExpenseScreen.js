@@ -24,7 +24,7 @@ class ExpenseScreen extends Component {
   }
   static navigationOptions = {
     title: 'Despesas',
-    headerStyle: {
+    headerStyle: { // Estilizando o menu
       backgroundColor: '#f44336',
     },
     headerTintColor: '#fff',
@@ -62,31 +62,31 @@ class ExpenseScreen extends Component {
       );
     }
     return (
-      <SafeAreaView> 
-      <ScrollView style={styles.container}>
-        {this.state.expenses.map((item, i) => (
-          <ListItem
-            key={i}
-            style={styles.item}
-            title={item.description}
-            rightTitle={`R$: ${item.value}`}
-            rightTitleStyle={{color: '#f44336',}}
-            rightSubtitle={item.paidOut === true ? 'Pago' : 'Pendente'}
-            bottomDivider
-            leftIcon={{
-              name: 'trending-down',
-              type: 'Ionicons',
-              color: '#f44336',
-            }}
-            onPress={() => {
-              this.props.navigation.navigate('ListExpenseRoute', {
-                boardkey: `${JSON.stringify(item.key)}`,
-              });
-            }}
-          />
-        ))}
-      </ScrollView>
-      <View>
+      <SafeAreaView>
+        <ScrollView style={styles.container}>
+          {this.state.expenses.map((item, i) => (
+            <ListItem
+              key={i}
+              style={styles.item}
+              title={item.description}
+              rightTitle={`R$: ${item.value}`}
+              rightTitleStyle={{color: '#f44336',}}
+              rightSubtitle={item.paidOut === true ? 'Pago' : 'Pendente'}
+              bottomDivider
+              leftIcon={{
+                name: 'trending-down',
+                type: 'Ionicons',
+                color: '#f44336',
+              }}
+              onPress={() => {
+                this.props.navigation.navigate('ListExpenseRoute', {
+                  boardkey: `${JSON.stringify(item.key)}`,
+                });
+              }}
+            />
+          ))}
+        </ScrollView>
+        <View>
           <TouchableOpacity
             style={styles.buttonLeft}
             onPress={() => this.props.navigation.navigate('AddExpenseRoute')}>
@@ -104,9 +104,7 @@ const styles = StyleSheet.create({
     paddingVertical: 22,
   },
   item: {
-    fontSize: 18,
     height: 60,
-    color: '#f44336',
   },
   buttonLeft: {
     position: 'absolute',
