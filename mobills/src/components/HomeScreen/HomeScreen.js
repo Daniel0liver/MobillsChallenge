@@ -1,9 +1,16 @@
 import React, {Component} from 'react';
 import {StyleSheet, Image, View, TouchableOpacity, Text} from 'react-native';
 import mobillsImage from '../../Assets/logoMobills.png';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
 class ListExpense extends Component {
   static navigationOptions = {
     title: 'Home',
+    headerStyle: {
+      // Estilizando o menu
+      backgroundColor: '#2173d2',
+    },
+    headerTintColor: '#fff',
   };
   render() {
     return (
@@ -14,8 +21,23 @@ class ListExpense extends Component {
           <Text style={styles.boxText}>Visão geral</Text>
           <TouchableOpacity
             style={styles.buttonLeft}
+            //onPress={() => this.props.navigation.push('ExpenseRoute')}
+          >
+            <Ionicons
+              name="ios-trending-up"
+              style={{fontSize: 20, color: '#4caf50'}}
+            />
+            <Text style={styles.textButtonIncome}>Receitas</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.buttonLeft}
             onPress={() => this.props.navigation.push('ExpenseRoute')}>
-            <Text style={styles.textButton}>Despesas</Text>
+            <Ionicons
+              name="ios-trending-down"
+              style={{fontSize: 20, color: '#f44336'}}
+            />
+            <Text style={styles.textButtonExpense}>Despesas</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -69,16 +91,23 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   buttonLeft: {
-    marginVertical: 20,
+    flexDirection: 'row',
+    marginVertical: 1,
     alignSelf: 'stretch',
     paddingVertical: 15,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     borderRadius: 5,
   },
-  textButton: {
+  textButtonIncome: {
     fontSize: 16,
-    color: '#f13',
+    color: '#4caf50',
+    marginHorizontal: 10,
+  },
+  textButtonExpense: {
+    fontSize: 16,
+    color: '#f44336',
+    marginHorizontal: 10,
   },
 });
 
