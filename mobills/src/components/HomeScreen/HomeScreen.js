@@ -3,7 +3,7 @@ import {StyleSheet, Image, View, TouchableOpacity, Text} from 'react-native';
 import mobillsImage from '../../Assets/logoMobills.png';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-class ListExpense extends Component {
+class HomeScreen extends Component {
   static navigationOptions = {
     title: 'Home',
     headerStyle: {
@@ -111,5 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListExpense;
-
+export default HomeScreen;
