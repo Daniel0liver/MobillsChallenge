@@ -82,7 +82,7 @@ class ExpenseScreen extends Component {
               }}
               onPress={() => {
                 this.props.navigation.navigate('ListExpenseRoute', {
-                  boardkey: `${JSON.stringify(item.key)}`,
+                  expenseKey: `${JSON.stringify(item.key)}`,
                 });
               }}
             />
