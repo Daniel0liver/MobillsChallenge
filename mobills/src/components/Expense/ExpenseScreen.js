@@ -57,7 +57,7 @@ class ExpenseScreen extends Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.activity}>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#2173d2" />
         </View>
       );
     }
@@ -69,7 +69,9 @@ class ExpenseScreen extends Component {
               key={i}
               style={styles.item}
               title={item.description}
-              rightTitle={`R$: ${item.value}`}
+              rightTitle={`R$ ${item.value
+                .toFixed(2) // casas decimais
+                .replace('.', ',')}`} // Alterando valor com (.) para (,)
               rightTitleStyle={{color: '#f44336',}}
               rightSubtitle={item.paidOut === true ? 'Pago' : 'Pendente'}
               bottomDivider
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
   },
   container: {
     height: '100%',
-    paddingVertical: 22,
+    paddingVertical: 20,
   },
   item: {
     height: 60,
