@@ -6,26 +6,28 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Text,
-  CheckBox,
   Platform,
 } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import DatePicker from 'react-native-datepicker';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import firestore from '@react-native-firebase/firestore';
 
-const refExpense = firestore().collection('expense');
-
 class AddExpense extends Component {
-  state = {
-    value: 0,
-    description: '',
-    date: new Date().toLocaleDateString('pt-BR'),
-    paidOut: true,
-    isAdded: false,
-    isDateTimePickerVisible: false,
-  };
+  constructor() {
+    super();
+    this.refExpense = firestore().collection('expense'); // Pegando a referencia da tabela "expense"
+    this.state = {
+      value: 0.00,
+      description: '',
+      date: new Date().toLocaleDateString('pt-BR'),
+      paidOut: true,
+      isAdded: false,
+      isDateTimePickerVisible: false,
+    };
+  }
 
-  static navigationOptions = {
+  static navigationOptions = { // Titulo da Página 
     title: 'Adicionar Despesa',
     headerStyle: { // Estilizando o menu
       backgroundColor: '#f44336',
@@ -35,9 +37,9 @@ class AddExpense extends Component {
 
   addExpense = async () => {
     const {value, description, date, paidOut} = this.state;
-    if (value > 0 || description != '') {
+    if (value > 0 || description != '') { // Validando campos varios no formulário
       try {
-        await refExpense.add({
+        await this.refExpense.add({ // Adicionando valores na tabela "expense"
           value: parseFloat(value),
           description: description,
           date: Date(date),
@@ -62,15 +64,18 @@ class AddExpense extends Component {
     return (
       <KeyboardAvoidingView
         behavior="padding"
-        enable={Platform.OS === 'ios'} style={styles.container}>
+        enable={Platform.OS === 'ios'}
+        style={styles.container}>
         <View>
           <View style={styles.fields}>
             <IconMaterialIcons name="attach-money" style={styles.icon}/>
             <TextInput
               style={styles.input}
+              showSoftInputOnFocus
               placeholder="Insira um valor"
-              keyboardType={'number-pad'}
-              value={this.state.value}
+              numeric
+              keyboardType={'decimal-pad'}
+              value={this.state.value} // Transmitindo valor na forma de String
               onChangeText={value => this.setState({value})}
             />
           </View>
@@ -104,7 +109,8 @@ class AddExpense extends Component {
               style={styles.input}
               placeholder="Descrição"
               value={this.state.description}
-              onChangeText={description => this.setState({description})} />
+              onChangeText={description => this.setState({description})}
+            />
           </View>
           <View style={styles.fields}>
             <CheckBox
