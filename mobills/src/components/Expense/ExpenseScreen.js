@@ -69,11 +69,32 @@ class ExpenseScreen extends Component {
               key={i}
               style={styles.item}
               title={item.description}
+              subtitle={new Date(item.date).toLocaleDateString('pt-BR')}
               rightTitle={`R$ ${item.value
                 .toFixed(2) // casas decimais
                 .replace('.', ',')}`} // Alterando valor com (.) para (,)
-              rightTitleStyle={{color: '#f44336',}}
-              rightSubtitle={item.paidOut === true ? 'Pago' : 'Pendente'}
+              rightTitleStyle={{color: '#f44336'}}
+              rightSubtitle={
+                item.paidOut === true ? (
+                  <View
+                    style={{
+                      backgroundColor: '#4caf50',
+                      borderRadius: 50,
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={styles.textStatusExpense}>Pago</Text>
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      backgroundColor: '#f44336',
+                      borderRadius: 50,
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={styles.textStatusExpense}>Pendente</Text>
+                  </View>
+                )
+              }
               bottomDivider
               leftIcon={{
                 name: 'trending-down',
@@ -116,6 +137,15 @@ const styles = StyleSheet.create({
   },
   item: {
     height: 60,
+  },
+  statusExpense: {
+    backgroundColor: '#f44336',
+    borderRadius: 50,
+    paddingHorizontal: 10,
+  },
+  textStatusExpense: {
+    color: '#fff',
+    fontSize: 12,
   },
   buttonLeft: {
     position: 'absolute',
