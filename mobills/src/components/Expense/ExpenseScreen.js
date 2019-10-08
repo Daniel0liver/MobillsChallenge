@@ -102,7 +102,7 @@ class ExpenseScreen extends Component {
                 color: '#f44336',
               }}
               onPress={() => {
-                this.props.navigation.navigate('ListExpenseRoute', {
+                this.props.navigation.navigate('EditExpenseRoute', {
                   expenseKey: `${JSON.stringify(item.key)}`,
                 });
               }}
