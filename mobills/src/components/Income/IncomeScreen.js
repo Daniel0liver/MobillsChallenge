@@ -24,20 +24,25 @@ class IncomeScreen extends Component {
     this.state = {
       isLoading: true,
       incomes: [],
+      totalIncome: 0,
     };
   }
   static navigationOptions = {
     title: 'Receitas',
     headerStyle: { // Estilizando o menu
       backgroundColor: '#4caf50',
+      elevation: 0,
     },
     headerTintColor: '#fff',
   };
 
   onCollectionUpdate = querySnapshot => {
     const incomes = [];
+    let total = 0;
     querySnapshot.forEach(doc => {
       const {value, description, date, received} = doc.data();
+      total += value; // Pegando valor total das receitas
+
       incomes.push({
         key: doc.id,
         doc, // DocumentSnapshot
@@ -49,6 +54,7 @@ class IncomeScreen extends Component {
     });
     this.setState({
       incomes,
+      totalIncome: total,
       isLoading: false,
     });
   };
@@ -67,6 +73,14 @@ class IncomeScreen extends Component {
     }
     return (
       <SafeAreaView>
+        <View style={styles.headerTotal}>
+          <Text style={styles.headerTotalText}>
+            {`R$ ${this.state.totalIncome
+              .toFixed(2) // casas decimais
+              .replace('.', ',')}
+            `}
+          </Text>
+        </View>
         <ScrollView style={styles.container}>
           {this.state.incomes.map((item, i) => (
             <ListItem
@@ -142,6 +156,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  headerTotal: {
+    backgroundColor: '#4caf50',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTotalText: {
+    color: '#fff',
+    fontSize: 20,
+  },
   container: {
     height: '100%',
   },
@@ -169,7 +192,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     right: 20,
-    bottom: 40,
+    bottom: 100,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
