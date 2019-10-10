@@ -9,22 +9,26 @@ import {
   ActivityIndicator,
   Text,
   Platform,
+  Alert,
 } from 'react-native';
+import {Button, Icon} from 'react-native-elements';
 import CheckBox from '@react-native-community/checkbox';
 import DatePicker from 'react-native-datepicker';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import firestore from '@react-native-firebase/firestore';
-import ExpenseScreen from './ExpenseScreen';
+import moment from 'moment';
 
-class AddExpense extends Component {
-  constructor() {
-    super();
+class EditExpense extends Component {
+  constructor(props) {
+    super(props);
     this.refExpense = firestore().collection('expense'); // Pegando a referencia da tabela "expense"
+    this.updateExpense = this.updateExpense.bind(this);
     this.state = {
       key: '',
-      value: 0.00,
+      value: 0.0,
       description: '',
-      date: new Date().toLocaleDateString('pt-BR'),
+      date: new Date(),
       paidOut: true,
       isDateTimePickerVisible: false,
       isLoading: true,
@@ -44,8 +48,9 @@ class AddExpense extends Component {
   componentDidMount() {
     const {navigation} = this.props;
     const ref = this.refExpense.doc(
-      JSON.parse(navigation.getParam('expenseKey')));
-    
+      JSON.parse(navigation.getParam('expenseKey')),
+    );
+
     // Listando todos os dados da despesa com id que está em ref
     ref.get().then(doc => {
       if (doc.exists) {
@@ -53,13 +58,13 @@ class AddExpense extends Component {
         this.setState({
           key: doc.id,
           value: expense.value,
-          date: expense.date,
+          date: new Date(expense.date._seconds * 1000), // Convertenda de timestamp para Date
           description: expense.description,
           paidOut: expense.paidOut,
           isLoading: false,
         });
       } else {
-        alert(`O id não foi encotrado!`)
+        alert(`O id não foi encotrado!`);
       }
     });
   }
@@ -68,39 +73,55 @@ class AddExpense extends Component {
     this.setState({
       isLoading: true,
     });
-    const {value, description, date, paidOut} = this.state;
-    // Validando campos varios no formulário
-    if (value > 0 || description != '') {
-      try {
-        this.refExpense
-          .add({
-            // Adicionando valores na tabela "expense"
-            value: parseFloat(value),
-            description: description,
-            date: Date(date),
-            paidOut: paidOut,
-          })
-          .then(refDocExpense => {
-            // Ao adicionar reseto os valores dos inputs
-            this.setState({
-              value: 0.00,
-              description: '',
-              date: date,
-              paidOut: true,
-              isLoading: false,
-            });
-            this.props.navigation.navigate('ExpenseScreen');
-          });
-      } catch (err) {
-        alert('Erro ao editar despesa ', err);
+    const updateRef = this.refExpense.doc(this.state.key);
+    updateRef
+      .update({
+        value: parseFloat(this.state.value),
+        description: this.state.description,
+        date: new moment(this.state.date).toDate(),
+        paidOut: this.state.paidOut,
+      })
+      .then(docRef => {
+        this.setState({
+          key: '',
+          value: 0.0,
+          description: '',
+          date: new Date(),
+          paidOut: true,
+          isLoading: false,
+        });
+        this.props.navigation.navigate('ExpenseRoute');
+      })
+      .catch(error => {
+        console.error('Error adding document: ', error);
         this.setState({
           isLoading: false,
         });
-      }
-    } else {
-      alert('Preencha todos os campos!')
-    }
-  };
+      });
+  }
+
+  deleteExpense(key) {
+    const {navigation} = this.props;
+    this.setState({
+      isLoading: true,
+    });
+
+    this.refExpense
+      .doc(key)
+      .delete()
+      .then(() => {
+        this.setState({
+          isLoading: false,
+        });
+        this.props.navigation.navigate('ExpenseRoute');
+      })
+      .catch(err => {
+        alert('Não foi possivel excluir', err)
+        this.setState({
+          isLoading: false,
+        });
+      });
+  }
 
   render() {
     if (this.state.isLoading) {
@@ -117,7 +138,7 @@ class AddExpense extends Component {
         style={styles.container}>
         <View>
           <View style={styles.fields}>
-            <IconMaterialIcons name="attach-money" style={styles.icon}/>
+            <IconMaterialIcons name="attach-money" style={styles.icon} />
             <TextInput
               style={styles.input}
               showSoftInputOnFocus
@@ -129,12 +150,12 @@ class AddExpense extends Component {
             />
           </View>
           <View style={styles.fields}>
-            <IconMaterialIcons name="date-range" style={styles.icon}/>
+            <IconMaterialIcons name="date-range" style={styles.icon} />
             <DatePicker
               style={{width: 200}}
               // Estou convertendo a data pois estava no padrão americano e estou mostrando no padrão br,
               // logo o tamanho é desproporcional e da erro invalid date
-              date={new Date(this.state.date).toLocaleDateString('pt-BR')}
+              date={this.state.date}
               mode="date"
               placeholder="selecione a data"
               format="DD/MM/YYYY"
@@ -150,12 +171,12 @@ class AddExpense extends Component {
                 },
               }}
               onDateChange={date => {
-                this.setState({date: date});
+                this.setState({date});
               }}
             />
           </View>
           <View style={styles.fields}>
-            <IconMaterialIcons name="description" style={styles.icon}/>
+            <IconMaterialIcons name="description" style={styles.icon} />
             <TextInput
               style={styles.input}
               placeholder="Descrição"
@@ -166,9 +187,7 @@ class AddExpense extends Component {
           <View style={styles.fields}>
             <CheckBox
               value={this.state.paidOut}
-              onValueChange={() =>
-                this.setState({paidOut: !this.state.paidOut})
-              }
+              onValueChange={paidOut => this.setState({paidOut})}
             />
             <Text style={{marginLeft: 10}}>Está pago</Text>
           </View>
@@ -180,8 +199,27 @@ class AddExpense extends Component {
             <Text style={styles.textButton}>Editar</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonLeft}>
-            <Text>Deletar</Text>
+          <TouchableOpacity
+            style={styles.buttonLeft}
+            onPress={() => {
+              Alert.alert(
+                'Deletar Despesa',
+                'Você realmente deseja excluir essa despesa?',
+                [
+                  {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'Cancelar',
+                  },
+                  {
+                    text: 'Excluir',
+                    onPress: () => this.deleteExpense(this.state.key),
+                  },
+                ],
+                {cancelable: false},
+              );
+            }}>
+            <Text style={styles.textButton}>Excluir</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -242,4 +280,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddExpense;
+export default EditExpense;
