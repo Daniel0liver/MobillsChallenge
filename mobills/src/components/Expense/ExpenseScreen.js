@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
   StyleSheet,
@@ -8,9 +9,12 @@ import {
   View,
   Text,
 } from 'react-native';
-import {List, ListItem, Button, Icon} from 'react-native-elements';
+import {ListItem} from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import moment, { utc } from 'moment';
+import 'moment/locale/pt-br';
 
 class ExpenseScreen extends Component {
   constructor() {
@@ -69,7 +73,9 @@ class ExpenseScreen extends Component {
               key={i}
               style={styles.item}
               title={item.description}
-              subtitle={new Date(item.date).toLocaleDateString('pt-BR')}
+              subtitle={moment(item.date.toDate())
+                .locale('pt-br')
+                .format('LL')}
               rightTitle={`R$ ${item.value
                 .toFixed(2) // casas decimais
                 .replace('.', ',')}`} // Alterando valor com (.) para (,)
@@ -81,6 +87,7 @@ class ExpenseScreen extends Component {
                       backgroundColor: '#4caf50',
                       borderRadius: 50,
                       paddingHorizontal: 10,
+                      marginTop: 5,
                     }}>
                     <Text style={styles.textStatusExpense}>Pago</Text>
                   </View>
@@ -90,17 +97,20 @@ class ExpenseScreen extends Component {
                       backgroundColor: '#f44336',
                       borderRadius: 50,
                       paddingHorizontal: 10,
+                      marginTop: 5,
                     }}>
                     <Text style={styles.textStatusExpense}>Pendente</Text>
                   </View>
                 )
               }
               bottomDivider
-              leftIcon={{
-                name: 'trending-down',
-                type: 'Ionicons',
-                color: '#f44336',
-              }}
+              leftIcon={
+                <Ionicons
+                  name="ios-trending-down"
+                  size={16}
+                  style={styles.leftIconExpense}
+                />
+              }
               onPress={() => {
                 this.props.navigation.navigate('EditExpenseRoute', {
                   expenseKey: `${JSON.stringify(item.key)}`,
@@ -133,10 +143,16 @@ const styles = StyleSheet.create({
   },
   container: {
     height: '100%',
-    paddingVertical: 20,
   },
   item: {
-    height: 60,
+    height: 65,
+  },
+  leftIconExpense: {
+    color: '#fff',
+    backgroundColor: '#f44336',
+    borderRadius: 50,
+    paddingHorizontal: 11,
+    paddingVertical: 10,
   },
   statusExpense: {
     backgroundColor: '#f44336',
