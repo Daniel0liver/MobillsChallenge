@@ -46,7 +46,7 @@ class AddExpense extends Component {
     });
     const {value, description, date, paidOut} = this.state;
     // Validando campos varios no formulário
-    if (value > 0 || description != '') {
+    if (value > 0 && description !== '') {
       try {
         await this.refExpense
           .add({

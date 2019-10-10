@@ -74,30 +74,38 @@ class EditExpense extends Component {
       isLoading: true,
     });
     const updateRef = this.refExpense.doc(this.state.key);
-    updateRef
-      .update({
-        value: parseFloat(this.state.value),
-        description: this.state.description,
-        date: new moment(this.state.date).toDate(),
-        paidOut: this.state.paidOut,
-      })
-      .then(docRef => {
-        this.setState({
-          key: '',
-          value: 0.0,
-          description: '',
-          date: new Date(),
-          paidOut: true,
-          isLoading: false,
+
+    if (this.state.value > 0 && this.state.description !== '') {
+      updateRef
+        .update({
+          value: parseFloat(this.state.value),
+          description: this.state.description,
+          date: new moment(this.state.date).toDate(),
+          paidOut: this.state.paidOut,
+        })
+        .then(docRef => {
+          this.setState({
+            key: '',
+            value: 0.0,
+            description: '',
+            date: new Date(),
+            paidOut: true,
+            isLoading: false,
+          });
+          this.props.navigation.navigate('ExpenseRoute');
+        })
+        .catch(error => {
+          console.error('Error adding document: ', error);
+          this.setState({
+            isLoading: false,
+          });
         });
-        this.props.navigation.navigate('ExpenseRoute');
-      })
-      .catch(error => {
-        console.error('Error adding document: ', error);
-        this.setState({
-          isLoading: false,
-        });
+    } else {
+      alert('Preencha todos os campos com valores validos!');
+      this.setState({
+        isLoading: false,
       });
+    }
   }
 
   deleteExpense(key) {

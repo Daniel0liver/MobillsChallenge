@@ -46,7 +46,7 @@ class AddIncome extends Component {
     });
     const {value, description, date, received} = this.state;
     // Validando campos varios no formulário
-    if (value > 0 || description != '') {
+    if (value > 0 && description !== '') {
       try {
         await this.refIncome
           .add({

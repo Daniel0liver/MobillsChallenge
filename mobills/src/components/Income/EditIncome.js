@@ -74,30 +74,38 @@ class EditIncome extends Component {
       isLoading: true,
     });
     const updateRef = this.refIncome.doc(this.state.key);
-    updateRef
-      .update({
-        value: parseFloat(this.state.value),
-        description: this.state.description,
-        date: new moment(this.state.date).toDate(),
-        received: this.state.received,
-      })
-      .then(docRef => {
-        this.setState({
-          key: '',
-          value: 0.0,
-          description: '',
-          date: new Date(),
-          received: true,
-          isLoading: false,
+
+    if (this.state.value > 0 && this.state.description !== '') {
+      updateRef
+        .update({
+          value: parseFloat(this.state.value),
+          description: this.state.description,
+          date: new moment(this.state.date).toDate(),
+          received: this.state.received,
+        })
+        .then(docRef => {
+          this.setState({
+            key: '',
+            value: 0.0,
+            description: '',
+            date: new Date(),
+            received: true,
+            isLoading: false,
+          });
+          this.props.navigation.navigate('IncomeRoute');
+        })
+        .catch(error => {
+          console.error('Error adding document: ', error);
+          this.setState({
+            isLoading: false,
+          });
         });
-        this.props.navigation.navigate('IncomeRoute');
-      })
-      .catch(error => {
-        console.error('Error adding document: ', error);
-        this.setState({
-          isLoading: false,
-        });
+    } else {
+      alert('Preencha todos os campos com valores validos!');
+      this.setState({
+        isLoading: false,
       });
+    }
   }
 
   deleteIncome(key) {
