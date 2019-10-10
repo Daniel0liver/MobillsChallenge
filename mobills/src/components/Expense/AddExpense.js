@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   KeyboardAvoidingView,
+  ActivityIndicator,
   Text,
   Platform,
 } from 'react-native';
@@ -12,6 +13,7 @@ import CheckBox from '@react-native-community/checkbox';
 import DatePicker from 'react-native-datepicker';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import firestore from '@react-native-firebase/firestore';
+import moment from 'moment';
 
 class AddExpense extends Component {
   constructor() {
@@ -20,47 +22,73 @@ class AddExpense extends Component {
     this.state = {
       value: 0.00,
       description: '',
-      date: new Date().toLocaleDateString('pt-BR'),
+      date: new Date(),
       paidOut: true,
       isAdded: false,
       isDateTimePickerVisible: false,
+      isLoading: false,
     };
   }
 
-  static navigationOptions = { // Titulo da Página 
+  static navigationOptions = {
+    // Titulo da Página
     title: 'Adicionar Despesa',
-    headerStyle: { // Estilizando o menu
+    headerStyle: {
+      // Estilizando o menu
       backgroundColor: '#f44336',
     },
     headerTintColor: '#fff',
   };
 
   addExpense = async () => {
+    this.setState({
+      isLoading: true,
+    });
     const {value, description, date, paidOut} = this.state;
-    if (value > 0 || description != '') { // Validando campos varios no formulário
+    // Validando campos varios no formulário
+    if (value > 0 || description != '') {
       try {
-        await this.refExpense.add({ // Adicionando valores na tabela "expense"
-          value: parseFloat(value),
-          description: description,
-          date: Date(date),
-          paidOut: paidOut,
-        });
-        this.setState({
-          isAdded: true,
-        });
-        if ((this.state.isAdded = true)) {
-          // Se for adicionado, redirecionar para despesas
-          this.props.navigation.goBack();
-        }
+        await this.refExpense
+          .add({
+            // Adicionando valores na tabela "expense"
+            value: parseFloat(value),
+            description: description,
+            date: new moment(date).toDate(), // Convertendo a data em timestamp
+            paidOut: paidOut,
+          })
+          .then(refDocExpense => {
+            // Ao adicionar reseto os valores dos inputs
+            this.setState({
+              value: 0.00,
+              description: '',
+              date: date,
+              paidOut: true,
+              isLoading: false,
+            });
+            this.props.navigation.goBack();
+          });
       } catch (err) {
-        alert(err);
+        alert('Erro ao adicionar despesa ', err);
+        this.setState({
+          isLoading: false,
+        });
       }
     } else {
-      alert('Preencha todos os campos!')
+      alert('Preencha todos os campos!');
+      this.setState({
+        isLoading: false,
+      });
     }
   };
 
   render() {
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.activity}>
+          <ActivityIndicator size="large" color="#2173d2" />
+        </View>
+      );
+    }
     return (
       <KeyboardAvoidingView
         behavior="padding"
@@ -99,7 +127,7 @@ class AddExpense extends Component {
                 },
               }}
               onDateChange={date => {
-                this.setState({date: date});
+                this.setState({date});
               }}
             />
           </View>
@@ -133,6 +161,15 @@ class AddExpense extends Component {
 }
 
 const styles = StyleSheet.create({
+  activity: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   container: {
     height: '100%',
     padding: 20,
