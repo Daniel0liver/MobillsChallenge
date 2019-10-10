@@ -1,28 +1,33 @@
 import React, {Component} from 'react';
 import {StyleSheet, Image, View, TouchableOpacity, Text} from 'react-native';
 import mobillsImage from '../../Assets/logoMobills.png';
-
+import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 class HomeScreen extends Component {
   static navigationOptions = {
     title: 'Home',
     headerStyle: {
       // Estilizando o menu
-      backgroundColor: '#2173d2',
+      elevation: 0,
+      backgroundColor: '#1565d0',
     },
     headerTintColor: '#fff',
   };
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.backgroundView} />
+        <LinearGradient
+          start={{x: 0, y: 0}}
+          end={{x: 0, y: 1}}
+          colors={[ '#1565d0', '#2193d2']}
+          style={styles.backgroundView}
+        />
         <Image source={mobillsImage} style={styles.mobillsImage} />
         <View style={styles.box}>
           <Text style={styles.boxText}>Visão geral</Text>
           <TouchableOpacity
             style={styles.buttonLeft}
-            //onPress={() => this.props.navigation.push('ExpenseRoute')}
-          >
+            onPress={() => this.props.navigation.push('IncomeRoute')}>
             <Ionicons
               name="ios-trending-up"
               style={{fontSize: 20, color: '#4caf50'}}
@@ -48,23 +53,23 @@ class HomeScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
   },
   backgroundView: {
     position: 'absolute',
     flex: 1,
     top: 0,
-    backgroundColor: '#2173d2',
     width: 400,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    height: 300,
+    height: '100%',
   },
   mobillsImage: {
+    marginTop: 60,
     width: 150,
     height: 150,
   },
@@ -73,8 +78,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignSelf: 'stretch',
     padding: 20,
+    marginTop: 60,
     borderRadius: 10,
-    marginBottom: 250,
     borderColor: '#ddd',
     borderBottomWidth: 0,
     shadowColor: '#c3c3c3',
@@ -82,9 +87,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.0,
     shadowRadius: 10,
     elevation: 3,
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 10,
   },
   boxText: {
     fontSize: 17,
