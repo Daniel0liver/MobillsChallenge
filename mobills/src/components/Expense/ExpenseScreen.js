@@ -73,6 +73,7 @@ class ExpenseScreen extends Component {
               key={i}
               style={styles.item}
               title={item.description}
+              titleStyle={{color:'#333'}}
               subtitle={moment(item.date.toDate())
                 .locale('pt-br')
                 .format('LL')}
@@ -94,7 +95,7 @@ class ExpenseScreen extends Component {
                 ) : (
                   <View
                     style={{
-                      backgroundColor: '#f44336',
+                      backgroundColor: '#e8b723',
                       borderRadius: 50,
                       paddingHorizontal: 10,
                       marginTop: 5,
