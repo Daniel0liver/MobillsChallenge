@@ -19,7 +19,7 @@ import 'moment/locale/pt-br';
 class IncomeScreen extends Component {
   constructor() {
     super();
-    this.refExpense = firestore().collection('income');
+    this.refIncome = firestore().collection('income').orderBy('date');
     this.unsubscribe = null;
     this.state = {
       isLoading: true,
@@ -60,7 +60,7 @@ class IncomeScreen extends Component {
   };
 
   componentDidMount() {
-    this.unsubscribe = this.refExpense.onSnapshot(this.onCollectionUpdate);
+    this.unsubscribe = this.refIncome.onSnapshot(this.onCollectionUpdate);
   }
 
   render() {

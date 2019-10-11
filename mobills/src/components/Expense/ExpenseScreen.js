@@ -19,7 +19,7 @@ import 'moment/locale/pt-br';
 class ExpenseScreen extends Component {
   constructor() {
     super();
-    this.refExpense = firestore().collection('expense');
+    this.refExpense = firestore().collection('expense').orderBy('date');
     this.unsubscribe = null;
     this.state = {
       isLoading: true,
