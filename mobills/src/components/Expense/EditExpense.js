@@ -161,12 +161,10 @@ class EditExpense extends Component {
             <IconMaterialIcons name="date-range" style={styles.icon} />
             <DatePicker
               style={{width: 200}}
-              // Estou convertendo a data pois estava no padrão americano e estou mostrando no padrão br,
-              // logo o tamanho é desproporcional e da erro invalid date
+              // Estou deixando a data no padrão americano pois estava dando erro ao add e não consegui corrigir
               date={this.state.date}
               mode="date"
               placeholder="selecione a data"
-              format="DD/MM/YYYY"
               customStyles={{
                 dateIcon: {
                   display: 'none', // removendo icon padrão

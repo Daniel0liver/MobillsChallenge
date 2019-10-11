@@ -114,7 +114,6 @@ class AddExpense extends Component {
               date={this.state.date} //state data inicial
               mode="date"
               placeholder="selecione a data"
-              format="DD/MM/YYYY"
               customStyles={{
                 dateIcon: {
                   display: 'none', // removendo icon padrão
